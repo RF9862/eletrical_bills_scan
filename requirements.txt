@@ -1,0 +1,8 @@
+paddlepaddle 
+paddleocr==2.7.0.2
+tensorflow==2.11.0
+scikit-learn
+numpy
+matplotlib
+openpyxl
+

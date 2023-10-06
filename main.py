@@ -109,25 +109,14 @@ def main(data_dir, output_dir, err_dir):
     
     return results
 
-if __name__ == "__main__":
+# if __name__ == "__main__":
 
-    # Key paths and parameters
-    DATA_DIR = "inputs"
-    OUTPUT_DIR = "results"
-    ERR_DIR = "Not-Adani"
+#     # Key paths and parameters
+#     DATA_DIR = "inputs"
+#     OUTPUT_DIR = "results"
+#     ERR_DIR = "Failed"
 
-#     # # Initialize logger
-#     # if os.path.exists('parse_table.log'):
-#     #     os.remove('parse_table.log')
-#     # logger = logging.getLogger('parse_table')
-#     # logger.setLevel(logging.INFO)
-#     # ch = logging.StreamHandler()
-#     # fh = logging.FileHandler('parse_table.log')
-#     # logger.addHandler(ch)
-#     # logger.addHandler(fh)
-
-#     # Run main control flow    
-    main(DATA_DIR, OUTPUT_DIR, ERR_DIR)
+#     main(DATA_DIR, OUTPUT_DIR, ERR_DIR)
 
     
     

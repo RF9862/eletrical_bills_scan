@@ -1,0 +1,13 @@
+paddlepaddle 
+paddleocr==2.7.0.2
+tensorflow==2.11.0
+scikit-learn
+torch
+torchvision
+numpy
+matplotlib
+openpyxl
+fastapi
+aiofiles
+uvicorn
+

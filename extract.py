@@ -78,12 +78,14 @@ def getNameOfBses(text):
         Owner = Owner.replace('NAME', '')
         Address = ' '.join(text[2:5])
         Address = Address.split(':')[-1].replace('ADDRESS', '')
-        if 'addre' in text[5].lower() or len(text[6]) < 8:
-            AccountNos = [v for v in text[6].split() if 'con' in v.lower() and len(v)>7]
-            AccountNo = AccountNos[0] if len(AccountNos) > 0 else ""  
-        else:
-            AccountNos = [v for v in text[5].split() if 'con' in v.lower() and len(v)>7]
-            AccountNo = AccountNos[0] if len(AccountNos) > 0 else ""                        
+        try:
+            if 'addre' in text[5].lower() or len(text[6]) < 8:
+                AccountNos = [v for v in text[6].split() if 'con' in v.lower() and len(v)>7]
+                AccountNo = AccountNos[0] if len(AccountNos) > 0 else ""  
+            else:
+                AccountNos = [v for v in text[5].split() if 'con' in v.lower() and len(v)>7]
+                AccountNo = AccountNos[0] if len(AccountNos) > 0 else ""      
+        except: pass                  
     else:
         for i, tex in enumerate(text):
 
@@ -469,7 +471,7 @@ def extractFromBSES(img_path, xc, yc):
             address = ' '.join(Text_1[1:])
         except: pass
     else:
-        NameAddressImg = img[yc+40:yc+240, max(xc-90, 0):int(w/2)]
+        NameAddressImg = img[yc+40:yc+240, max(xc-90, 0):xc+460]
         nameAddressTexts = ocr.ocr(NameAddressImg, cls=False)[0]
         yc_1, xc_1, Text_1 = getCoorAndText(nameAddressTexts)
         AccountNo, ownerName, address = getNameOfBses(Text_1)

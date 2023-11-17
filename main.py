@@ -38,16 +38,19 @@ def apiMain(img_path):
 
     if Check is None:       
         Check = classificationFromImgByResnet(img_path)
-    if Check == 0:
-        out = extractFromAdani(img_path, xc, yc)
-    elif Check == 1:
-        out = extractFromBSES(img_path, xc, yc)
-    elif Check == 2:
-        out = extractFromMSEB(img_path, xc, yc)
-    elif Check == 3:
-        out = extractFromReliance(img_path, xc, yc)
-    else:
-        out = extractFromTata(img_path, xc, yc)
+    try:
+        if Check == 0:
+            out = extractFromAdani(img_path, xc, yc)
+        elif Check == 1:
+            out = extractFromBSES(img_path, xc, yc)
+        elif Check == 2:
+            out = extractFromMSEB(img_path, xc, yc)
+        elif Check == 3:
+            out = extractFromReliance(img_path, xc, yc)
+        else:
+            out = extractFromTata(img_path, xc, yc)
+    except: 
+        out = {}
     return out  
 def main(data_dir, output_dir, err_dir):
     '''

@@ -10,4 +10,7 @@ openpyxl
 fastapi
 aiofiles
 uvicorn
+ipython
+seaborn
+python-multipart
 

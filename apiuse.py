@@ -10,9 +10,11 @@ url = severURL + '/ElecBills'
 # payload = {
 #     'fileName' : batchName
 # }
-filePath = "0-image325849.jpg"
-files = [('files', open(filePath, 'rb'))]
+inputs = os.listdir("inputs")
+allfiles = [v for v in inputs if v[-4:] in ['.jpg', '.png']]
+outputs = {}
+for filePath in allfiles:
+    files = [('files', open(filePath, 'rb'))]
+    response = requests.post(url, files=files)
 
-response = requests.post(url, files=files)
-
-print(response.json())
+    print(response.json())

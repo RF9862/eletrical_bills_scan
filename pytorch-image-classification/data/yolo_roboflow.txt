@@ -1,0 +1,45 @@
+
+!pip install roboflow
+
+from roboflow import Roboflow
+rf = Roboflow(api_key="Gx2onhCgowmqBGdQZgcB")
+project = rf.workspace("kristalai").project("electricity_bills-ccobh")
+dataset = project.version(1).download("yolov5")
+
+
+colab:
+############################
+!git clone https://github.com/ultralytics/yolov5  # clone repo
+%cd yolov5
+%pip install -qr requirements.txt  # install
+
+!pip install roboflow
+
+from roboflow import Roboflow
+rf = Roboflow(api_key="Gx2onhCgowmqBGdQZgcB")
+project = rf.workspace("kristalai").project("electricity_bills-ccobh")
+dataset = project.version(1).download("yolov5")
+
+import torch
+import utils
+display = utils.notebook_init()
+from utils.downloads import attempt_download
+
+p5 = ['n', 's', 'm', 'l', 'x']  # P5 models
+cls = [f'{x}' for x in p5]  # segmentation models
+
+for x in cls:
+    attempt_download(f'weights/yolov5{x}.pt')
+
+
+
+# %cd yolov5/
+# cp  /mntDrive/My\ Drive/epoch80.pt
+# %cd ..
+!python train.py --img 800 --batch 16 --epochs 150 --data electricity_bills-1/data.yaml --weights weights/yolov5m.pt --save-period 4
+
+# from google.colab import files
+# files.download('example.txt')
+
+##########################################################
+

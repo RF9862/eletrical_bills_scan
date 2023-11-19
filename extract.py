@@ -63,6 +63,11 @@ def getCategory(text):
             except: pass
             break
     return Category, Owner, Address, CategoryInd 
+def getNameOfBest(text):
+    Owner, Address = '', ''
+    Owner = text[0]
+    Address = ' '.join(text[3:5])
+    return Owner, Address
 def getNameOfBses(text):
 
     AccountNo, Owner, Address = '', '', ''
@@ -84,8 +89,13 @@ def getNameOfBses(text):
                 AccountNo = AccountNos[0] if len(AccountNos) > 0 else ""  
             else:
                 AccountNos = [v for v in text[5].split() if 'con' in v.lower() and len(v)>7]
-                AccountNo = AccountNos[0] if len(AccountNos) > 0 else ""      
-        except: pass                  
+                AccountNo = AccountNos[0] if len(AccountNos) > 0 else ""  
+            if AccountNo == "": 
+                for i in range(3):
+                    AccountNos = [v for v in text[5+i].split() if len(v)>7]
+                    AccountNo = AccountNos[0] if len(AccountNos) > 0 else "" 
+                    if AccountNo != "": break
+        except: pass   
     else:
         for i, tex in enumerate(text):
 
@@ -333,7 +343,7 @@ def extract_dates(text):
                 temp = day
                 day = year
                 year = temp
-            dates.append([str(day), str(month), str(year)])
+            dates.append([str(day).zfill(2), str(month).zfill(2), str(year).zfill(4)])
     return dates
 def getBillDate(text):
     
@@ -355,9 +365,9 @@ def getBillDate(text):
                     return tex            
     if Bill_date == '':
         for i, tex in enumerate(text):
-            tex = re.sub('[a-zA-Z]', '', tex)
+            tex = re.sub('[a-zA-Z]', '', tex).strip()
             Bill_date = extract_dates(tex)
-            if Bill_date != '': break
+            if Bill_date: break
     if Bill_date != []: Bill_date = '-'.join(Bill_date[0])
     else: Bill_date = ''
     return Bill_date 
@@ -378,6 +388,20 @@ def getCategoryOfTata(text):
             Category = 'COMMERCIAL'
             break
     return Category  
+def getCategoryOfBest(text):
+    Category, AccountNo = 'RESIDENTIAL', ""
+
+    for i, tex in enumerate(text):
+        if 'commer' in tex.lower():
+            Category = 'COMMERCIAL'
+            break
+    for i, tex in enumerate(text):
+        AccountNos = [v for v in tex.split() if len(v)>6]
+        if len(AccountNos) > 0:
+            AccountNo = AccountNos[0]
+            break
+        
+    return Category, AccountNo
 def extractFromAdani(img_path, xc, yc):
     output = {}
     img = cv2.imread(img_path)
@@ -424,7 +448,32 @@ def extractFromReliance(img_path, xc, yc):
     output['Bill_Date'] = ""
     output['Account_no'] = ""
 
-    return output  
+    return output 
+def extractFromBest(img_path, xc, yc) :
+    output = {}
+    img = cv2.imread(img_path)
+    h, w = img.shape[0:2]    
+    ownNameImg = img[yc+110:yc+300, max(0, xc-60):xc+380]
+    nameResults = ocr.ocr(ownNameImg, cls=False)
+    _, _, Text1 = getCoorAndText(nameResults[0])
+    ownerName, address = getNameOfBest(Text1)
+    cateImg = img[yc+150:yc+330, xc+830:xc+1020]
+    cateResults = ocr.ocr(cateImg, cls=False)
+    _, _, Text2 = getCoorAndText(cateResults[0])
+    Category, AccountNo = getCategoryOfBest(Text2)
+    dateImg = img[yc+430:yc+490, xc+340:xc+520]
+    dateResults = ocr.ocr(dateImg, cls=False)
+    _, _, date_text = getCoorAndText(dateResults[0])
+    Bill_Date = getBillDate(date_text)
+    
+    output['Service_Provider_Name'] = 'BEST'
+    output['Category'] = Category
+    output['Owner_name'] = ownerName
+    output['Address'] = address
+    output['Bill_Date'] = Bill_Date
+    output['Account_no'] = AccountNo
+
+    return output     
 def extractFromBSES(img_path, xc, yc):
     output = {}
     if xc is None: 

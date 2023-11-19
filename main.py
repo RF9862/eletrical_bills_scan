@@ -1,7 +1,7 @@
 import os
 import shutil
 import datetime
-from extract import extractFromAdani, extractFromTata, extractFromBSES, extractFromMSEB, extractFromReliance
+from extract import extractFromAdani, extractFromTata, extractFromBSES, extractFromMSEB, extractFromReliance, extractFromBest
 # from classification import classificationFromImg
 from classification_resnet import classificationFromImgByResnet
 from yolo_usage.assist import getTotalValue
@@ -29,12 +29,12 @@ def makedir(dir):
         pass
 def apiMain(img_path):
     print(f"Parsing file: {img_path}")
-    weights = 'weights/epoch140.pt'
-    halfImg = img_path[0:-4] + '_1.jpg'
-    img = cv2.imread(img_path)
-    cv2.imwrite(halfImg, img[0:int(img.shape[0]/2)])
-    Check, xc, yc = getTotalValue(weights=weights, conf_thres=0.3, source=halfImg)[0]
-    os.remove(halfImg)
+    weights = 'weights/epoch108.pt'
+    # halfImg = img_path[0:-4] + '_1.jpg'
+    # img = cv2.imread(img_path)
+    # cv2.imwrite(img, img[0:int(img.shape[0]/2)])
+    Check, xc, yc = getTotalValue(weights=weights, conf_thres=0.3, source=img_path)[0]
+    # os.remove(halfImg)
 
     if Check is None:       
         Check = classificationFromImgByResnet(img_path)
@@ -42,15 +42,18 @@ def apiMain(img_path):
         if Check == 0:
             out = extractFromAdani(img_path, xc, yc)
         elif Check == 1:
-            out = extractFromBSES(img_path, xc, yc)
+            out = extractFromBest(img_path, xc, yc)
         elif Check == 2:
-            out = extractFromMSEB(img_path, xc, yc)
+            out = extractFromBSES(img_path, xc, yc)
         elif Check == 3:
-            out = extractFromReliance(img_path, xc, yc)
+            out = extractFromMSEB(img_path, xc, yc)
+        elif Check == 4:
+            out = extractFromReliance(img_path, xc, yc)            
         else:
             out = extractFromTata(img_path, xc, yc)
     except: 
         out = {}
+    out['File_name'] = img_path.split("\\")[-1]
     return out  
 def main(data_dir, output_dir, err_dir):
     '''

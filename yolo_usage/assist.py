@@ -22,7 +22,7 @@ def getTotalValue(
         weights='best.pt',  # model path or triton URL
         source='data/images',  # file/dir/URL/glob/screen/0(webcam)
         data='data/coco128.yaml',  # dataset.yaml path
-        imgsz=(640, 640),  # inference size (height, width)
+        imgsz=(800, 800),  # inference size (height, width)
         conf_thres=0.25,  # confidence threshold
         iou_thres=0.45,  # NMS IOU threshold
         max_det=1000,  # maximum detections per image
@@ -188,8 +188,7 @@ def getTotalValue(
             xc = int((bo[0]+bo[2])/2)
             yc = int((bo[1]+bo[3])/2)
             con = con[0]
-            if label == "2": label = "3"
-            elif label=="3": label = "4"
+
             result.append([int(label), xc, yc])
         else:
             result.append([None, None, None])

@@ -134,7 +134,7 @@ ResNetConfig = namedtuple('ResNetConfig', ['block', 'n_blocks', 'channels'])
 resnet50_config = ResNetConfig(block = Bottleneck,
                                n_blocks = [3, 4, 6, 3],
                                channels = [64, 128, 256, 512])
-model = ResNet(resnet50_config, 5)
+model = ResNet(resnet50_config, 6)
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 criterion = nn.CrossEntropyLoss()
 model = model.to(device)

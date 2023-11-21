@@ -76,7 +76,7 @@ async def create_upload_file(file: UploadFile = File(...)):
 async def create_files( files: List[UploadFile] = File(...)):
     
     my_file = files[0]
-    outPath =  os.path.join('./static', 'inputs', str(int(time.time()*100000)) + '.jpg') 
+    outPath =  os.path.join('./static', 'inputs', f"{my_file.filename[:-4]}_{str(int(time.time()*100000))}.jpg") 
     content = my_file.file._file.read()
     async with aiofiles.open(outPath, 'wb') as out_file:
         # content = await my_file.file._file.read()  # async read

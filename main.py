@@ -53,7 +53,7 @@ def apiMain(img_path):
             out = extractFromTata(img_path, xc, yc)
     except: 
         out = {}
-    out['File_name'] = img_path.split("\\")[-1]
+    out['File_name'] = img_path.split("\\")[-1][:-20]+'.jpg'
     return out  
 def main(data_dir, output_dir, err_dir):
     '''

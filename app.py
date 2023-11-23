@@ -113,4 +113,4 @@ def clear_contents(dir_path):
     return None
 if __name__ == "__main__":
     makedir('./static')
-    uvicorn.run("app:app", port=5000, host='127.0.0.1')
+    uvicorn.run("app:app", port=3726, host='0.0.0.0')
